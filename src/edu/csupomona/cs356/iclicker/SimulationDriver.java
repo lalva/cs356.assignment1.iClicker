@@ -2,8 +2,20 @@ package edu.csupomona.cs356.iclicker;
 
 public class SimulationDriver {
   public static void main(String[] args) {
+	String q;
+	String[] a;
+	String qType;
+	Question question;
     // create question
+	qType = "SingleChoice";
+	q = "Is OOP fun?";
     // create answers
+	a = new String[]{"True", "False"};
+	
+	switch(qType) {
+	case "MultipleChoice":
+	  question = new MultipleChoiceQuestion(q, a);
+	}
 
     // configure IClickerService
 

@@ -19,10 +19,4 @@ public class Student {
   public boolean submitAnswers(IClickerService iClick) {
     return iClick.submit(this.uuid, this.answers);
   }
-  
-  public String checkAnswers(String[] correctAnswers) {
-    // compare the two arrays, for each match remove from both arrays
-    // if both arrays are not empty then the student's answer is wrong
-    return "YOU ARE WRONG";
-  }
 }

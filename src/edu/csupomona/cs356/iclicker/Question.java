@@ -1,12 +1,30 @@
 package edu.csupomona.cs356.iclicker;
 
-public class Question {
+public abstract class Question {
   protected String q;
-  protected String type;
-  protected String[] correctAnswers;
+  protected String[] a;
   
   public Question() {
-    this.q = "Default Question?";
-    this.type = "Default";
+    this.q = "Pass me a question!";
+    this.a = null;
   }
+  
+  public Question(String question, String[] answers) {
+	this.q = question;
+	this.a = answers;
+  }
+  
+  public String getQ() {
+	return q;
+  }
+  
+  public String[] getA() {
+	return a;
+  }
+  
+  public boolean setA(String[] answers) {
+	return (a = answers).equals(answers);
+  }
+  
+  public abstract String checkA(String[] submittedAnswers);
 }
