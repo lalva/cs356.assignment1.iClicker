@@ -1,30 +1,32 @@
 package edu.csupomona.cs356.iclicker;
+import java.util.ArrayList;
 
 public abstract class Question {
   protected String q;
-  protected String[] a;
+  protected ArrayList<String> a;
+  protected ArrayList<String> correct;
   
-  public Question() {
-    this.q = "Pass me a question!";
-    this.a = null;
-  }
-  
-  public Question(String question, String[] answers) {
+  public Question(String question, ArrayList<String> answers, ArrayList<String> correct) {
 	this.q = question;
 	this.a = answers;
+	this.correct = correct;
   }
   
-  public String getQ() {
-	return q;
-  }
+//  public String getQ() {
+//	return q;
+//  }
+//  
+//  public ArrayList<String> getA() {
+//	return a;
+//  }
+//  
+//  public boolean setA(ArrayList<String> answers) {
+//	return (a = answers).equals(answers);
+//  }
   
-  public String[] getA() {
-	return a;
+  public abstract String checkA(ArrayList<String> submittedAnswers);
+
+  public boolean inChoices(String submission) {
+	return false;
   }
-  
-  public boolean setA(String[] answers) {
-	return (a = answers).equals(answers);
-  }
-  
-  public abstract String checkA(String[] submittedAnswers);
 }
