@@ -6,19 +6,21 @@ public class MultipleChoiceQuestion extends Question {
 	super(q, a, correct);
   }
   
+  // Check the multiple choice answer, make sure at least one answer was submitted.
   public String checkA(ArrayList<String> submittedAnswers) {
 	if (submittedAnswers.size() < 1) {
 	  return "Please submit at least one answer.";
 	} else {
 	  boolean correct = true;
-	  for (Integer i = 0; i < this.a.size(); i++) {
-		correct = submittedAnswers.remove(a.get(i));
+	  ArrayList<String> temp = new ArrayList<String>(submittedAnswers);
+	  for (Integer i = 0; i < this.correct.size(); i++) {
+		correct = temp.remove(this.correct.get(i));
 		if (!correct) {
 		  break;
 		}
 	  }
-	  if (!correct || submittedAnswers.size() != 0) {
-		return "Your answer is incorrect. The correct answer is "+this.a.toString();
+	  if (!correct || temp.size() != 0) {
+		return "Your answer is incorrect. The correct answer is "+this.correct.toString();
 	  } else {
 		return "Your answer is correct!";
 	  }

@@ -1,40 +1,44 @@
 package edu.csupomona.cs356.iclicker;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class SimulationDriver {
-  public static void main(ArrayList<String> args) {
-	String qType;
-	String q;
-	ArrayList<String> choices;
+  public static void main(String[] args) {
+	ArrayList<IClickerService> services = new ArrayList<IClickerService>();
+	ArrayList<String> singleChoices = new ArrayList<String>();
+	ArrayList<String> multiChoices = new ArrayList<String>();
+	ArrayList<String> answer = new ArrayList<String>();
+	ArrayList<String> answers = new ArrayList<String>();
+	
+	singleChoices.add("True");
+	singleChoices.add("False");
+	answer.add(singleChoices.get(0));
+	
+    multiChoices.add("Yes");
+    multiChoices.add("No");
+    multiChoices.add("Maybe");
+    answers.add(multiChoices.get(0));
+    answers.add(multiChoices.get(2));
+	
+	services.add(SimulationRun("SingleChoice", "Is OOP fun?", singleChoices, answer, 25));
+	services.add(SimulationRun("MultipleChoice", "Is this an awesome program?", multiChoices, answers, 45));
+  }
+  
+  // Start a simulation, this is a wrapper so you can have multiple runs.
+  private static IClickerService SimulationRun(String qType, String q, ArrayList<String> choices, ArrayList<String> answers, Integer num_students) {
 	Question question;
 	IClickerService iClicker;
-	Integer NUM_STUDENTS = 35;
-	Student[] students = new Student[NUM_STUDENTS];
+	Student[] students = new Student[num_students];
     
 	// 1)
 	// create a question type and configure the answers
-	qType = "SingleChoice";
-	q = "Is OOP fun?";
-	
 	switch(qType) {
 	case "MultipleChoice":
-	  choices = new ArrayList<String>();
-	  choices.add("Yes");
-	  choices.add("No");
-	  choices.add("I don't know");
-	  ArrayList<String> answers = new ArrayList<String>();
-	  answers.add(choices.get(0));
-	  answers.add(choices.get(2));
 	  question = new MultipleChoiceQuestion(q, choices, answers);
 	  break;
 	default:
-	  choices = new ArrayList<String>();
-	  choices.add("True");
-	  choices.add("False");
-	  ArrayList<String> answer = new ArrayList<String>();
-	  answer.add(choices.get(0));
-	  question = new SingleChoiceQuestion(q, choices, answer);
+	  question = new SingleChoiceQuestion(q, choices, answers);
+	  break;
 	}
 
 	// 2)
@@ -43,29 +47,50 @@ public class SimulationDriver {
 
 	// 3 and 4)
     // create students, generate an answer, then submit the answer
-	for (Student student : students) {
-	  student = new Student();
-	  student.enterAnswers(rand_gen_answers(choices));
-	  student.submitAnswers(iClicker);
+	for (Integer i = 0; i < students.length; i++) {
+	  students[i] = new Student();
+	  students[i].enterAnswers(rand_gen_answers(choices, qType));
+	  students[i].submitAnswers(iClicker);
+	}
+	if (iClicker.totalSubmissions() != num_students) {
+	  System.err.println("Number of submissions is " + iClicker.totalSubmissions().toString());
 	}
 
     // for some students submit a 2nd answer
 	for (Integer i = 0; i < students.length; i += 5) {
-	  students[i].enterAnswers(rand_gen_answers(choices));
+	  students[i].enterAnswers(rand_gen_answers(choices, qType));
 	  students[i].submitAnswers(iClicker);
 	}
+	if (iClicker.totalSubmissions() != num_students) {
+	  System.err.println("Number of submissions is " + iClicker.totalSubmissions().toString());
+	}
+	
+	// end submissions
+	iClicker.endSubmissions();
 
     // for each student check answers and notify the student
 	for (Student student : students) {
-	  student.checkAnswer(question);
+	  student.checkAnswer(iClicker);
 	}
 	
 	// 5)
     // show statistics
-    System.out.println("You haven't done anything yet...");
+    System.out.println(iClicker.showStats());
+    return iClicker;
   }
 
-  private static ArrayList<String> rand_gen_answers(ArrayList<String> choices) {
-	return null;
+  // Randomly generate answers, duplicate answers can be in the returning array.
+  // Does not allow answers outside of the available choices.
+  private static ArrayList<String> rand_gen_answers(ArrayList<String> choices, String type) {
+	Integer numAnswers = 1;
+	Random rand = new Random();
+	ArrayList<String> answers = new ArrayList<String>();
+	if (type == "MultipleChoice") {
+	  numAnswers = rand.nextInt(choices.size() - 1) + 1;
+	}
+	for (Integer i = 0; i < numAnswers; i++) {
+	  answers.add(choices.get(rand.nextInt(choices.size())));
+	}
+	return answers;
   }
 };
