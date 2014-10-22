@@ -31,12 +31,10 @@ public class Student {
     return iClick.submit(this.uuid, this.answers);
   }
 
-  // check the stored answers
+  // check the stored answers comment out the System.out to be more verbose
   public void checkAnswer(IClickerService iClick) {
-	if (this.answers == null) {
-	  return;
-	}
-	iClick.checkA(answers);
-	// System.out.println(this.uuid + ": " + iClick.checkA(answers));
+	@SuppressWarnings("unused")
+	String check = iClick.checkA(this.uuid);
+	//System.out.println(this.uuid + ": " + check);
   }
 }

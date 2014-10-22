@@ -22,7 +22,7 @@ public abstract class Question {
 
   // Getter for the choices
   public ArrayList<String> getChoices() {
-	return choices;
+	return this.choices;
   }
 
   // Make sure a choice is valid

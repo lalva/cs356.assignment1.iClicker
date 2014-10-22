@@ -6,7 +6,7 @@ import java.util.Set;
 
 // IClickerService stores submissions and uses the question to
 // validate submissions and show statistics for question choices.
-// submissions_end tells the instance when we have stopped colelcting
+// submissions_end tells the instance when we have stopped collecting
 // submissions and num_correct keeps track of how many submissions
 // were correct, used for statistics.
 public class IClickerService {
@@ -20,7 +20,6 @@ public class IClickerService {
     this.submissions = new Hashtable<String, ArrayList<String>>();
     this.submissions_end = false;
     this.num_correct = 0;
-    
   }
   
   // Accept a submission from a student. Validate the submission by
@@ -52,7 +51,7 @@ public class IClickerService {
   // Print out statistics for this iClicker instance.
   public String showStats() {
 	String stats = "Question:\n";
-	stats += q.getQuestion();
+	stats += this.q.getQuestion();
 	stats += "\n-----------------";
 	stats += "\nAnswer Statistics\n";
 	stats += "-----------------\n";
@@ -60,7 +59,7 @@ public class IClickerService {
 	for (String choice : choices) {
 	  Integer numChoice = 0;
 	  for (String uuid : submissions.keySet()) {
-		if (submissions.get(uuid).contains(choice)) {
+		if (this.submissions.get(uuid).contains(choice)) {
 		  numChoice++;
 		}
 	  }
@@ -84,11 +83,15 @@ public class IClickerService {
   }
 
   // Allow answers to be checked only if submissions have ended
-  public String checkA(ArrayList<String> answers) {
-	if (!submissions_end) {
+  public String checkA(String uuid) {
+	if (!this.submissions_end) {
 	  return "Please wait until submission collection has ended.";
 	}
-	String check = q.checkA(answers);
+	ArrayList<String> answers= this.submissions.get(uuid);
+	if (answers == null) {
+	  return "You have not submitted any answers.";
+	}
+	String check = this.q.checkA(answers);
 	if (check.compareTo("Your answer is correct!") == 0) {
 	  this.num_correct++;
 	}

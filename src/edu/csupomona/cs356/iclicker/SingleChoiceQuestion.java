@@ -4,6 +4,9 @@ import java.util.ArrayList;
 public class SingleChoiceQuestion extends Question {
   public SingleChoiceQuestion(String q, ArrayList<String> a, ArrayList<String> correct) {
     super(q, a, correct);
+	if (correct.size() != 1) {
+	  throw new IllegalArgumentException("The correct answers array must contain only one answer.");
+	}
   }
   
   // Check the answer of the submission, only allow one answer since this is single choice.
