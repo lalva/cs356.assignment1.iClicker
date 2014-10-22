@@ -6,6 +6,9 @@ import java.util.Set;
 
 // IClickerService stores submissions and uses the question to
 // validate submissions and show statistics for question choices.
+// submissions_end tells the instance when we have stopped colelcting
+// submissions and num_correct keeps track of how many submissions
+// were correct, used for statistics.
 public class IClickerService {
   private Hashtable<String, ArrayList<String>> submissions;
   private Question q;
@@ -75,10 +78,12 @@ public class IClickerService {
 	return this.submissions.size();
   }
   
+  // Stop accepting submissions
   public void endSubmissions() {
 	this.submissions_end = true;
   }
 
+  // Allow answers to be checked only if submissions have ended
   public String checkA(ArrayList<String> answers) {
 	if (!submissions_end) {
 	  return "Please wait until submission collection has ended.";
